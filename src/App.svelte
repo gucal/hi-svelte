@@ -1,30 +1,112 @@
 <script>
-	export let name;
+  import { onMount } from "svelte";
+  import { v4 as uuidv4 } from "uuid";
+
+  import Todo from "./components/Todo.svelte";
+
+  let todoText = "";
+  let todos = [];
+
+  onMount(() => {
+    let oldTodos = JSON.parse(localStorage.getItem("todos"));
+    if (oldTodos) {
+      todos = oldTodos;
+    }
+  });
+
+  onMount(() => {
+    window.addEventListener(
+      "beforeunload",
+      function (e) {
+        localStorage.setItem("todos", JSON.stringify(todos));
+      },
+      false
+    );
+  });
+
+  const addTodo = () => {
+    if (todoText.trim().length < 1) {
+      alert("Metin kutusu boş bırakılamaz!");
+      return;
+    }
+    todos.push({ id: uuidv4(), text: todoText, complete: false });
+    todoText = "";
+    todos = todos;
+  };
+
+  const completeTodo = (event) => {
+    let id = event.detail.id;
+    let completedTodoIndex = todos.findIndex((todo) => todo.id === id);
+    todos[completedTodoIndex] = {
+      ...todos[completedTodoIndex],
+      complete: true,
+    };
+    todos = todos;
+  };
+
+  const deleteTodo = (event) => {
+    let id = event.detail.id;
+    todos = todos.filter((todo) => todo.id !== id);
+  };
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+  <div class="container">
+    <div class="action">
+      <input bind:value={todoText} />
+      <button on:click={addTodo}>Ekle</button>
+    </div>
+    <div class="todos">
+      <h3>Yapılacaklar Listesi</h3>
+
+      {#each todos as todo, index (todo.id)}
+        <Todo
+          on:delete={deleteTodo}
+          on:complete={completeTodo}
+          {todo}
+          {index}
+        />
+      {/each}
+    </div>
+  </div>
 </main>
 
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
+  main {
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .container {
+    width: 100%;
+    max-width: 560px;
+  }
+  .action {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+  }
+  input {
+    border: 0;
+    flex: 3;
+    width: 100%;
+    background-color: #fecdd2;
+  }
+  button {
+    border: 0;
+    flex: 1;
+    color: #be123b;
+    background-color: #fecdd2;
+    width: 100%;
+  }
+  .todos {
+    background-color: #fff;
+    border-radius: 4px;
+  }
+  h3 {
+    text-align: center;
+    padding: 0.75rem;
+    color: #be123b;
+  }
 </style>
