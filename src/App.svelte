@@ -48,17 +48,19 @@
     let id = event.detail.id;
     todos = todos.filter((todo) => todo.id !== id);
   };
+
+  const onKeyPress = (event) => {
+    if (event.charCode == 13) addTodo();
+  };
 </script>
 
 <main>
   <div class="container">
     <div class="action">
-      <input bind:value={todoText} />
+      <input bind:value={todoText} on:keypress={onKeyPress} />
       <button on:click={addTodo}>Ekle</button>
     </div>
     <div class="todos">
-      <h3>Yapılacaklar Listesi</h3>
-
       {#each todos as todo, index (todo.id)}
         <Todo
           on:delete={deleteTodo}
@@ -103,10 +105,5 @@
   .todos {
     background-color: #fff;
     border-radius: 4px;
-  }
-  h3 {
-    text-align: center;
-    padding: 0.75rem;
-    color: #be123b;
   }
 </style>

@@ -2,6 +2,7 @@
   export let todo;
   export let index;
   import { createEventDispatcher } from "svelte";
+  import Icon from "@iconify/svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -13,20 +14,24 @@
 </script>
 
 <main>
-  <div
-    data-toggle="tooltip"
-    title={todo.text}
-    style={`background-color:${index % 2 == 0 ? "#fecdd2" : "#be123b"};color:${
-      index % 2 == 0 ? "#be123b" : "#fff"
-    }`}
-  >
+  <div data-toggle="tooltip" title={todo.text}>
     <p style={`text-decoration:${todo.complete && "line-through"}`}>
       {index + 1}. {todo.text}
     </p>
     {#if todo.complete}
-      <span on:click={() => actionTodo("delete")}>Listeden kaldır</span>
+      <span title="Listeden Kaldır" on:click={() => actionTodo("delete")}>
+        <Icon
+          icon="mdi:close-circle"
+          style={"color:red;font-size:22px"}
+        /></span
+      >
     {:else}
-      <span on:click={() => actionTodo("complete")}>Tamamlandı</span>
+      <span title="Tamamlandı" on:click={() => actionTodo("complete")}
+        ><Icon
+          icon="mdi:check-circle"
+          style={"color:green;font-size:22px"}
+        /></span
+      >
     {/if}
   </div>
 </main>
