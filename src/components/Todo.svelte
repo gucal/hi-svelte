@@ -1,6 +1,7 @@
 <script>
   export let todo;
   export let index;
+  
   import { createEventDispatcher } from "svelte";
   import Icon from "@iconify/svelte";
 

@@ -27,7 +27,7 @@
   const addTodo = () => {
     if (todoText.trim().length < 1) {
       alert("Metin kutusu boş bırakılamaz!");
-      return;
+      return null;
     }
     todos.push({ id: uuidv4(), text: todoText, complete: false });
     todoText = "";
@@ -83,6 +83,9 @@
   .container {
     width: 100%;
     max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
   .action {
     display: flex;
@@ -93,17 +96,28 @@
     border: 0;
     flex: 3;
     width: 100%;
-    background-color: #fecdd2;
+    background-color: #dedede;
+  }
+  input:focus {
+    outline: 1px solid #ff3938;
   }
   button {
+    font-weight: 600;
+    cursor: pointer;
     border: 0;
     flex: 1;
-    color: #be123b;
-    background-color: #fecdd2;
+    color: #ff3938;
+    background-color: #dedede;
     width: 100%;
   }
   .todos {
+    padding: 8px;
+    height: 540px;
+    overflow: auto;
+    border: 1px solid #dedede;
+    border-radius: 10px;
     background-color: #fff;
     border-radius: 4px;
   }
+
 </style>
